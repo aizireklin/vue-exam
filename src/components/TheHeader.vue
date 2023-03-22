@@ -9,6 +9,9 @@
                     <li class="navigate__item">
                         <RouterLink to="/object">Абонемент</RouterLink>
                     </li>
+                    <li class="navigate__item">
+                        <a :href="('@/assets/main.json')">File</a>
+                    </li>
                 </ul>
             </nav>
             <ul class="header__list">

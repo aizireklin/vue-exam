@@ -167,5 +167,11 @@ export default {
   background-color: black;
   color: white;
 }
+
+@media print {
+  .object__button {
+    display: none;
+  }
+}
 </style>
   

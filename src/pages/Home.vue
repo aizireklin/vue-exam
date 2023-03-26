@@ -59,6 +59,7 @@
             <div class="contact__content">
                 <div class="contact__info">
                     <v-text-field
+                        class="contact__search"
                         v-model="search"
                         append-icon="mdi-magnify"
                         label="Поиск"
@@ -72,39 +73,20 @@
                             :key="item.title"
                             :title="item.name"
                             :subtitle="item.text"
-                        ></v-list-item>
+                        >
+                    </v-list-item>
                     </v-list>
                 </div>
-                <form class="contact__form" @submit.prevent="submit" max-width="540px" width="100%">
-                    <v-text-field v-model="name.value.value" variant="outlined"
-                    :error-messages="name.errorMessage.value" label="Имя">
-                    </v-text-field>
-                    <v-text-field v-model="phone.value.value" variant="outlined"
-                    :error-messages="phone.errorMessage.value" label="Номер телефона">
-                    </v-text-field>
-                    <v-text-field v-model="email.value.value" variant="outlined"
-                    :error-messages="email.errorMessage.value" label="E-mail">
-                    </v-text-field>
-                    <v-textarea v-model="text.value.value" label="Ваш вопрос или предложение" 
-                    variant="outlined" :error-messages="text.errorMessage.value">
-                    </v-textarea>
-                    <div class="contact__action">
-                        <v-btn class="me-4" type="submit" @click="sendComment({name: name.value.value, text: text.value.value})">
-                            Отправить
-                        </v-btn>
-                        <v-btn @click="handleReset">
-                            Очистить
-                        </v-btn>
-                    </div>   
-                </form>
+                <HomeForm :comments="comments" @commentSubmit="this.sendComment"/>
             </div>
         </div>
     </section>
 </template>
   
 <script>
-import { useField, useForm } from 'vee-validate'
 let file = require('@/assets/main.json')
+import HomeForm from '@/components/HomeForm.vue';
+
 
 export default {
     name: 'HomePage',
@@ -148,8 +130,9 @@ export default {
     },
     methods: {
         sendComment(obj){
-            let list = this.onlineComments
-            list.push(obj)
+            this.comments.push(obj)
+            console.log(obj)
+            this.onlineComments = this.filterList(this.search, this.comments);
         },
         filterList(value,list) {
             return list.filter(item => {
@@ -159,42 +142,9 @@ export default {
     },
     created(){
         this.tariffs = file;
-        // this.tariffs.forEach(item => {
-        //     item.image = require('+item.image+');
-        //     console.log(item.image)
-        // })
     },
-    setup () {
-      const { handleSubmit, handleReset } = useForm({
-        validationSchema: {
-          name (value) {
-            if (value?.length >= 2) return true
-            return 'Имя должно быть не менее двух символов!'
-          },
-          phone (value) {
-            if (value?.length > 9 && /[0-9-]+/.test(value)) return true
-            return 'Тeлефонный номер должен состоять из более 9 цифр'
-          },
-          email (value) {
-            if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true
-            return 'Неправильно введен e-mail адрес.'
-          },
-          text (value) {
-            if (10 <= value?.length && value?.length <= 240) return true
-            return 'Сообщение должно быть от 10 до 240 символов'
-          },
-        },
-      })
-      const name = useField('name')
-      const phone = useField('phone')
-      const email = useField('email')
-      const text = useField('text')
-
-      const submit = handleSubmit(values => {
-        alert(JSON.stringify(values, null, 2))
-      })
-
-      return { name, phone, email, text, submit, handleReset }
+    components: {
+        HomeForm,
     },
 }
 </script>
@@ -264,6 +214,10 @@ export default {
 .contact__info {
     margin: 20px auto;
     max-width: 540px;
+}
+
+.contact__search {
+    min-width: 300px;
 }
 .contact__form {
     display: flex;

@@ -4,13 +4,13 @@
             <nav class="header__navigate navigate">
                 <ul class="navigate__list">
                     <li class="navigate__item">
-                        <RouterLink to="/">Главная</RouterLink>
+                        <RouterLink class="navigate__link" :class="$route.name=='Home'?'navigate__link--active':''" to="/">Главная</RouterLink>
                     </li>
                     <li class="navigate__item">
-                        <RouterLink to="/object">Абонемент</RouterLink>
+                        <RouterLink class="navigate__link" :class="$route.name=='Object'?'navigate__link--active':''" to="/object">Абонемент</RouterLink>
                     </li>
                     <li class="navigate__item">
-                        <a :href="('@/assets/main.json')">File</a>
+                        <RouterLink class="navigate__link" :class="$route.name=='JSON'?'navigate__link--active':''" to="/json">JSON файл</RouterLink>
                     </li>
                 </ul>
             </nav>
@@ -23,14 +23,18 @@
                         </svg>
                     </a>
                 </li>
-                <li class="header__item">
+                <li class="header__item header__item--row">
                     <v-avatar
                         icon="mdi-vuetify"
-                        image="https://avatars0.githubusercontent.com/u/9064066?v=4&s=460"
+                        :image="require('@/assets/avaWoman.png')"
                         rounded="16"
                         size="42"
                         alt="Avatar User"
                     ></v-avatar>
+                    <div class="header__info">
+                        <p class="header__name">Анна Смирнова</p>
+                        <p class="header__tariff">тариф: Стандартный</p>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -80,6 +84,17 @@
         justify-content: center;
     }
 
+    .header__item--row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 500;
+    }
+    .header__link {
+        display: block;
+        height: 36px;
+    }
+
     .header__label {
         position: absolute;
         top: -1;
@@ -87,6 +102,46 @@
         display: none;
     }
 
+    .navigate__link {
+        font-size: 14px;
+        font-weight: 400;
+        text-decoration: none;
+        text-transform: uppercase;
+        color: black;
+        opacity: 0.85;
+        padding: 4px;
+        border: 1px solid transparent;
+        transition: all 200ms ease;
+    }
 
+    .navigate__link--active {
+        color: rgb(49, 49, 205);
+        font-weight: 500;
+    }
+
+    .navigate__link:hover {
+        opacity: 1;
+        border: 1px solid rgb(49, 49, 205);
+        border-radius: 4px;
+    }
+
+    .header__tariff {
+        color: rgb(49, 49, 205);
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 1;
+    }
+
+    .header__info {
+        display: flex;
+        flex-direction: column;
+        line-height: 1;
+    }
+
+    @media print {
+  .header {
+    display: none;
+  }
+}
   </style>
   
